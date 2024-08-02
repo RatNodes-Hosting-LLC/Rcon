@@ -6,9 +6,21 @@ const Rcon = require('rcon-client').Rcon;
 const app = express();
 const PORT = process.env.PORT || 10000;
 
+// Get the allowed IP from environment variables
+const ALLOWED_IP = process.env.ALLOWED_IP;
+
 // Middleware
 app.use(bodyParser.json());
 app.use(express.static('public')); // Serve static files from the 'public' directory
+
+// Middleware to check IP address
+app.use((req, res, next) => {
+    const requestIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    if (requestIp !== ALLOWED_IP) {
+        return res.status(403).json({ error: 'Access denied: Your IP is not allowed.' });
+    }
+    next();
+});
 
 // RCON connection settings
 const rconOptions = {
