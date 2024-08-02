@@ -32,15 +32,15 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: var(--bg-color-light);
-            color: var(--text-color-light);
+            background-color: var(--bg-color-dark);
+            color: var(--text-color-dark);
             transition: background-color var(--transition-speed), color var(--transition-speed);
             position: relative; /* For positioning the toggle button */
         }
 
         #container {
             text-align: center;
-            background: var(--bg-color-light);
+            background: var(--bg-color-dark);
             padding: 2em;
             border-radius: 12px;
             box-shadow: var(--box-shadow);
@@ -52,7 +52,7 @@
         h1 {
             font-size: 2em;
             margin-bottom: 1em;
-            color: var(--text-color-light);
+            color: var(--text-color-dark);
         }
 
         input[type="text"] {
@@ -61,19 +61,19 @@
             margin: 1em 0;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
-            background: var(--input-bg-light);
-            color: var(--text-color-light);
+            background: var(--input-bg-dark);
+            color: var(--text-color-dark);
             transition: border-color var(--transition-speed), background var(--transition-speed);
         }
 
         input[type="text"]:focus {
-            border-color: var(--button-bg-light);
+            border-color: var(--button-bg-dark);
             outline: none;
         }
 
         button {
             padding: 10px 20px;
-            background-color: var(--button-bg-light);
+            background-color: var(--button-bg-dark);
             color: white;
             border: none;
             border-radius: var(--border-radius);
@@ -85,12 +85,12 @@
         }
 
         button:hover {
-            background-color: var(--button-hover-light);
+            background-color: var(--button-hover-dark);
         }
 
         pre {
             text-align: left;
-            background: var(--input-bg-light);
+            background: var(--input-bg-dark);
             padding: 1em;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
@@ -182,7 +182,7 @@
         }
     </style>
 </head>
-<body>
+<body class="dark-mode"> <!-- Set dark mode as default -->
     <div class="toggle-container" onclick="toggleDarkMode()" aria-label="Toggle Dark/Light Mode">
         <div class="toggle-switch">
             <div class="toggle-ball"></div>
@@ -209,6 +209,8 @@
         const darkMode = localStorage.getItem('darkMode');
         if (darkMode === 'enabled') {
             document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode'); // Ensure light mode is set if not enabled
         }
 
         async function fetchResponse(command) {
