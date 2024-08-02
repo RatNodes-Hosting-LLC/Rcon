@@ -6,23 +6,9 @@ const Rcon = require('rcon-client').Rcon;
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// Access password from environment variables
-const ACCESS_PASSWORD = process.env.ACCESS_PASSWORD;
-
 // Middleware
 app.use(bodyParser.json());
 app.use(express.static('public')); // Serve static files from the 'public' directory
-
-// Middleware to check password
-app.use((req, res, next) => {
-    const password = req.headers['authorization'];
-
-    // Check if the password is provided and matches
-    if (!password || password !== ACCESS_PASSWORD) {
-        return res.status(403).json({ error: 'Access denied: Invalid password.' });
-    }
-    next();
-});
 
 // RCON connection settings
 const rconOptions = {
