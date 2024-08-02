@@ -35,6 +35,7 @@
             background-color: var(--bg-color-light);
             color: var(--text-color-light);
             transition: background-color var(--transition-speed), color var(--transition-speed);
+            position: relative; /* For positioning the toggle button */
         }
 
         #container {
@@ -107,15 +108,41 @@
             color: #999;
         }
 
-        .toggle-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.5em;
+        .toggle-container {
             position: absolute;
-            top: 20px;
+            bottom: 20px;
             right: 20px;
-            color: inherit;
+            display: flex;
+            align-items: center;
+        }
+
+        .toggle-switch {
+            width: 60px;
+            height: 30px;
+            background: var(--border-color);
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-ball {
+            width: 26px;
+            height: 26px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+
+        body.dark-mode .toggle-switch {
+            background: var(--button-bg-dark);
+        }
+
+        body.dark-mode .toggle-ball {
+            transform: translateX(30px);
         }
 
         /* Dark Mode Styles */
@@ -156,9 +183,11 @@
     </style>
 </head>
 <body>
-    <button class="toggle-button" onclick="toggleDarkMode()" aria-label="Toggle Dark/Light Mode">
-        <i class="fas fa-moon"></i>
-    </button>
+    <div class="toggle-container" onclick="toggleDarkMode()" aria-label="Toggle Dark/Light Mode">
+        <div class="toggle-switch">
+            <div class="toggle-ball"></div>
+        </div>
+    </div>
     <div id="container">
         <h1><i class="fab fa-minecraft"></i> Minecraft RCON Interface</h1>
         <input type="text" id="command" placeholder="Enter command" autofocus>
@@ -237,7 +266,6 @@
         function toggleDarkMode() {
             const darkModeEnabled = document.body.classList.toggle('dark-mode');
             localStorage.setItem('darkMode', darkModeEnabled ? 'enabled' : 'disabled');
-            toggleButton.innerHTML = darkModeEnabled ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
         }
 
         // Add event listener for Enter key
