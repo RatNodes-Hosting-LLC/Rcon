@@ -87,9 +87,16 @@
     </div>
 
     <script>
+        const responseElement = document.getElementById('response');
+
+        // Load previous responses from localStorage
+        const savedResponses = localStorage.getItem('consoleOutput');
+        if (savedResponses) {
+            responseElement.textContent = savedResponses;
+        }
+
         async function sendCommand() {
             const command = document.getElementById('command').value;
-            const responseElement = document.getElementById('response');
 
             if (!command) return; // Prevent sending empty commands
 
@@ -101,10 +108,19 @@
                 });
 
                 const data = await response.json();
-                responseElement.textContent = data.result;
+                const newOutput = `> ${command}\n${data.result}\n`;
+                responseElement.textContent += newOutput; // Append new output
+
+                // Save updated output to localStorage
+                localStorage.setItem('consoleOutput', responseElement.textContent);
             } catch (error) {
-                responseElement.textContent = 'Error: ' + error.message;
+                const errorMessage = `Error: ${error.message}\n`;
+                responseElement.textContent += errorMessage; // Append error message
+                localStorage.setItem('consoleOutput', responseElement.textContent);
             }
+
+            // Clear the input field
+            document.getElementById('command').value = '';
         }
 
         // Add event listener for Enter key
