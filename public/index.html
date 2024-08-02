@@ -221,7 +221,10 @@
 
             updateOutput(`> ${command}\n`); // Show command in output
             document.getElementById('command').value = ''; // Clear input field
-            responseElement.innerHTML += '<div class="loading">Loading...</div>'; // Show loading message
+            const loadingMessage = document.createElement('div');
+            loadingMessage.className = 'loading';
+            loadingMessage.textContent = 'Loading...';
+            responseElement.appendChild(loadingMessage); // Show loading message
 
             try {
                 const data = await fetchResponse(command);
@@ -231,7 +234,6 @@
             }
 
             // Remove loading message
-            const loadingMessage = responseElement.querySelector('.loading');
             if (loadingMessage) {
                 loadingMessage.remove();
             }
