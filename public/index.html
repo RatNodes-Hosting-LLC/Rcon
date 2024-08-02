@@ -100,11 +100,6 @@
             font-family: 'Courier New', Courier, monospace;
         }
 
-        .loading {
-            font-style: italic;
-            color: #999;
-        }
-
         @media (max-width: 500px) {
             #container {
                 padding: 1.5em;
@@ -164,21 +159,12 @@
 
             updateOutput(`> ${command}\n`); // Show command in output
             document.getElementById('command').value = ''; // Clear input field
-            const loadingMessage = document.createElement('div');
-            loadingMessage.className = 'loading';
-            loadingMessage.textContent = 'Loading...';
-            responseElement.appendChild(loadingMessage); // Show loading message
 
             try {
                 const data = await fetchResponse(command);
                 updateOutput(`${data.result}\n`);
             } catch (error) {
                 updateOutput(`Error: ${error.message}\n`);
-            }
-
-            // Remove loading message
-            if (loadingMessage) {
-                loadingMessage.remove();
             }
         }
 
