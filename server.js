@@ -7,6 +7,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
+app.use(express.static('public')); // Serve static files from the 'public' directory
 
 const rconConfig = {
     host: process.env.RCON_HOST,

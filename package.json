@@ -3,13 +3,15 @@
     "version": "1.0.0",
     "main": "server.js",
     "scripts": {
-      "start": "node server.js"
+      "start": "node server.js",
+      "frontend": "serve public"
     },
     "dependencies": {
       "express": "^4.17.1",
       "body-parser": "^1.19.0",
       "rcon-client": "^4.1.1",
-      "dotenv": "^10.0.0"
+      "dotenv": "^10.0.0",
+      "serve": "^14.0.1"
     }
   }
   

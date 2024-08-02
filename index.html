@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft RCON Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #container {
+            text-align: center;
+            background: white;
+            padding: 2em;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 0.5em;
+            margin: 1em 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 0.5em 2em;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        pre {
+            text-align: left;
+            background: #f8f8f8;
+            padding: 1em;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Minecraft RCON Interface</h1>
+        <input type="text" id="command" placeholder="Enter command">
+        <button onclick="sendCommand()">Send</button>
+        <pre id="response"></pre>
+    </div>
+
+    <script>
+        async function sendCommand() {
+            const command = document.getElementById('command').value;
+            const responseElement = document.getElementById('response');
+
+            try {
+                const response = await fetch('/rcon', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ command })
+                });
+
+                const data = await response.json();
+                responseElement.textContent = data.result;
+            } catch (error) {
+                responseElement.textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
