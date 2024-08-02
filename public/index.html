@@ -115,6 +115,7 @@
             position: absolute;
             top: 20px;
             right: 20px;
+            color: inherit;
         }
 
         /* Dark Mode Styles */
@@ -155,7 +156,7 @@
     </style>
 </head>
 <body>
-    <button class="toggle-button" onclick="toggleDarkMode()">
+    <button class="toggle-button" onclick="toggleDarkMode()" aria-label="Toggle Dark/Light Mode">
         <i class="fas fa-moon"></i>
     </button>
     <div id="container">
@@ -168,7 +169,6 @@
 
     <script>
         const responseElement = document.getElementById('response');
-        const toggleButton = document.querySelector('.toggle-button');
 
         // Load previous responses from localStorage
         const savedResponses = localStorage.getItem('consoleOutput');
@@ -237,6 +237,7 @@
         function toggleDarkMode() {
             const darkModeEnabled = document.body.classList.toggle('dark-mode');
             localStorage.setItem('darkMode', darkModeEnabled ? 'enabled' : 'disabled');
+            toggleButton.innerHTML = darkModeEnabled ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
         }
 
         // Add event listener for Enter key
