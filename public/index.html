@@ -51,6 +51,7 @@
             cursor: pointer;
             font-size: 1em;
             transition: background-color 0.3s;
+            margin-top: 10px;
         }
         button:hover {
             background-color: #0056b3;
@@ -67,6 +68,11 @@
             overflow-y: auto;
             white-space: pre-wrap;
             word-wrap: break-word;
+            scroll-behavior: smooth;
+        }
+        .loading {
+            font-style: italic;
+            color: #999;
         }
         @media (max-width: 500px) {
             #container {
@@ -83,6 +89,7 @@
         <h1><i class="fab fa-minecraft"></i> Minecraft RCON Interface</h1>
         <input type="text" id="command" placeholder="Enter command" autofocus>
         <button onclick="sendCommand()">Send</button>
+        <button onclick="clearOutput()">Clear Output</button>
         <pre id="response"></pre>
     </div>
 
@@ -95,11 +102,7 @@
             responseElement.textContent = savedResponses;
         }
 
-        async function sendCommand() {
-            const command = document.getElementById('command').value;
-
-            if (!command) return; // Prevent sending empty commands
-
+        async function fetchResponse(command) {
             try {
                 const response = await fetch('/rcon', {
                     method: 'POST',
@@ -107,20 +110,48 @@
                     body: JSON.stringify({ command })
                 });
 
-                const data = await response.json();
-                const newOutput = `> ${command}\n${data.result}\n`;
-                responseElement.textContent += newOutput; // Append new output
+                if (!response.ok) {
+                    throw new Error('Failed to fetch response from the server');
+                }
 
-                // Save updated output to localStorage
-                localStorage.setItem('consoleOutput', responseElement.textContent);
+                return await response.json();
             } catch (error) {
-                const errorMessage = `Error: ${error.message}\n`;
-                responseElement.textContent += errorMessage; // Append error message
-                localStorage.setItem('consoleOutput', responseElement.textContent);
+                throw new Error(error.message);
+            }
+        }
+
+        function updateOutput(text) {
+            responseElement.textContent += text; // Append new output
+            localStorage.setItem('consoleOutput', responseElement.textContent); // Save to localStorage
+            responseElement.scrollTop = responseElement.scrollHeight; // Scroll to the bottom
+        }
+
+        async function sendCommand() {
+            const command = document.getElementById('command').value;
+
+            if (!command) return; // Prevent sending empty commands
+
+            updateOutput(`> ${command}\n`); // Show command in output
+            document.getElementById('command').value = ''; // Clear input field
+            responseElement.innerHTML += '<div class="loading">Loading...</div>'; // Show loading message
+
+            try {
+                const data = await fetchResponse(command);
+                updateOutput(`${data.result}\n`);
+            } catch (error) {
+                updateOutput(`Error: ${error.message}\n`);
             }
 
-            // Clear the input field
-            document.getElementById('command').value = '';
+            // Remove loading message
+            const loadingMessage = responseElement.querySelector('.loading');
+            if (loadingMessage) {
+                loadingMessage.remove();
+            }
+        }
+
+        function clearOutput() {
+            responseElement.textContent = ''; // Clear the console output
+            localStorage.removeItem('consoleOutput'); // Remove saved output from localStorage
         }
 
         // Add event listener for Enter key
